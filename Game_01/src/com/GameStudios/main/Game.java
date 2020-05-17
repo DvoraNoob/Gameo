@@ -32,7 +32,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	private boolean isRunning = true;
 	public static final int WIDTH = 240;
 	public static final int HEIGHT = 160;
-	private final int SCALE = 3;
+	public static final int SCALE = 3;
 	
 	private BufferedImage image;
 	
@@ -94,7 +94,6 @@ public Game() {
 	}
 	}
 
-	@SuppressWarnings("rawtypes")
 	public static void main(String args []){
 		Game game = new Game();
 		game.start();
@@ -109,7 +108,7 @@ public Game() {
 			}
 		}
 	
-	public void render1() {
+	public void render() {
 		BufferStrategy bs = this.getBufferStrategy();
 		if(bs == null) {
 			this.createBufferStrategy(3);
@@ -153,7 +152,7 @@ public Game() {
 			lastTime = now;
 			if (delta >= 1) {
 				tick();
-				render1();
+				render();
 				frames++;
 				delta--;
 			}
@@ -166,11 +165,6 @@ public Game() {
 		}
 		
 		stop();
-	}
-
-	private void render() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

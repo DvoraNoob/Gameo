@@ -39,6 +39,10 @@ public class Player extends Entity {
 	
 	public void tick() {
 		moved = false;
+		maskx = 4;
+		masky = 1;
+		mwidth = 9;
+		mheight = 15;
 		if(right && World.isFree((int)(x+speed),this.getY())) {
 			moved = true;
 			dir = right_dir;
@@ -68,16 +72,25 @@ public class Player extends Entity {
 			}
 		}
 		
-		this.checkCollissionLifePack();
-		this.checkCollisionAmmo();
+		this.checkCollissionItens();
 		
 		Camera.x = Camera.clamp(this.getX() - (Game.WIDTH/2),0, World.WIDTH*16 - Game.WIDTH);
-		Camera.y =  Camera.clamp(this.getY() - (Game.HEIGHT/2),0, World.HEIGHT*16 - Game.HEIGHT);
+		Camera.y = Camera.clamp(this.getY() - (Game.HEIGHT/2),0, World.HEIGHT*16 - Game.HEIGHT);
 	}
 	
-	public void checkCollisionAmmo() {
+	public void checkCollissionItens() {
 		for(int i = 0; i < Game.entities.size(); i++) {
 			Entity atual = Game.entities.get(i);
+			if(atual instanceof Lifepack) {
+				if(Entity.isColidding(this, atual)) {
+					System.out.println("colidiu");
+					life+=10;
+					if(life > 100)
+						life = 100;
+					Game.entities.remove(atual);
+				}
+			}
+			
 			if(atual instanceof Bullet) {
 				if(Entity.isColidding(this, atual)) {
 					ammo++;
@@ -89,32 +102,14 @@ public class Player extends Entity {
 			
 		}
 		
-		
-	}
-	
-	public void checkCollissionLifePack() {
-		for(int i = 0; i < Game.entities.size(); i++) {
-			Entity atual = Game.entities.get(i);
-			if(atual instanceof Lifepack) {
-				if(Entity.isColidding(this, atual)) {
-					life+=10;
-					if(life > 100)
-						life = 100;
-					Game.entities.remove(atual);
-				}
-			}
-			
-			
-		}
-		
 	}
 
-public void render (Graphics g) {
-	if(dir == right_dir) {
-	g.drawImage(rightPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
-}else if(dir == left_dir) {
-	g.drawImage(leftPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
-}
-}
+	public void render (Graphics g) {
+		if(dir == right_dir) {
+		g.drawImage(rightPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+	}else if(dir == left_dir) {
+		g.drawImage(leftPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+	}
+	}
 }
 

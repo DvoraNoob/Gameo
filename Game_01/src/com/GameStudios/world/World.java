@@ -19,11 +19,11 @@ public class World {
 	public World(String path) {
 		try {
 			BufferedImage map = ImageIO.read(getClass().getResource(path));
-			int[] pixels = new int[map.getWidth() * map.getHeight()];
-			tiles = new Tile [map.getWidth() * map.getHeight()];
+			int[] pixels = new int[map.getWidth()*map.getHeight()];
 			WIDTH = map.getWidth();
 			HEIGHT = map.getHeight();
-			map.getRGB(0, 0, map.getWidth(), map.getHeight(), pixels, 0, map.getWidth());
+			tiles = new Tile[map.getWidth()*map.getHeight()];
+			map.getRGB(0, 0, map.getWidth(), map.getHeight(), pixels, 0, map.getWidth() );
 			for(int xx = 0; xx < map.getWidth(); xx++) {
 				for(int yy = 0; yy < map.getHeight(); yy++){
 					int pixelAtual = pixels [xx+(yy * map.getWidth())];
@@ -46,12 +46,14 @@ public class World {
 						Game.entities.add(new Weapon(xx*16,yy*16,16,16,Entity.WEAPON_EN));
 					}else if(pixelAtual == 0xFFF2ACF0) {
 						//Life Pack
-						Lifepack pack = new Lifepack(xx*16,yy*16,16,16,Entity.LIFEPACK_EN);
+						Lifepack pack = new Lifepack(xx*16, yy*16,16,16,Entity.LIFEPACK_EN);
+						pack.setMask(3, 7, 9, 9);
 						Game.entities.add(pack);
 					}else if(pixelAtual == 0xFFF2CD00) {
 						//Bullet
-						Game.entities.add(new Bullet(xx*16,yy*16,16,16,Entity.BULLET_EN));
-					}
+						Bullet bullet = new Bullet(xx*16, yy*16,16,16,Entity.BULLET_EN);
+						bullet.setMask(4, 8, 8, 8);
+						Game.entities.add(bullet);					}
 					
 					
 						
